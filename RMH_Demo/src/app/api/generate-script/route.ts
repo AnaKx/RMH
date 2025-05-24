@@ -1,18 +1,91 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse }     from 'next/server';
+import type { NextRequest } from 'next/server';
+import type { EducationEntry, CertEntry } from '@/lib/types'
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { form } = req.body;
+type Step1Data = {
+  firstName: string;
+  lastName: string;
+  displayName: string;
+  location: string;
+  languages: string[];
+  about: string;
+};
 
-  const aiRes = await fetch(process.env.VISLA_KEY!, {
+
+type Step2Data = {
+  role: string
+  skills: { name: string }[]
+  education:  EducationEntry[]
+  cert_award: CertEntry[]
+}
+
+
+type FormData = Step1Data & Step2Data;
+
+export async function POST(request: NextRequest) {
+  const { form } = (await request.json()) as { form:FormData };
+
+
+  const prompt = `
+You’re an AI scriptwriter. You must generate a spoken script where:
+• The Introduction takes up approximately 1/6 of the total time,
+• The Core Message takes up 2/3 of the total time,
+• The Conclusion takes up 1/6 of the total time.
+• This structure scales proportionally, whether the video is closer to 60 or 90 seconds. It most be at least 60 seconds and 90 seconds at the longest. 
+• There are exactly three sections: [Introduction], [Core Message], and [Conclusion].  
+• Introduction: State the speaker’s name and one key detail (profession, passion, or role).  
+• Core message:  
+  – What they do (skills/expertise).  
+  – Why it matters (impact or achievement).  
+  – A fun fact or unique quality.  
+• Conclusion: End with an invitation or goal (e.g., “Let’s connect to…”).  
+• Uses a warm, confident tone, natural pauses, and cues for body language (smile, eye contact).  
+• Keeps the language clear, engaging, and concise.  
+
+Output only the final script with these three headings—no extra labels or timestamps.
+${Object.entries(form)
+    .map(([k, v]) => `• ${k}: ${Array.isArray(v) ? v.join(', ') : v}`)
+    .join('\n')}
+  `.trim();
+
+  const aiRes = await fetch('https://api.cohere.ai/v1/chat', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: form }),
+    headers: {
+      'Authorization': `Bearer ${process.env.COHERE_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'command-a-03-2025',
+      message: prompt,
+      max_tokens: 300,
+      temperature: 0.2,
+    }),
   });
 
   if (!aiRes.ok) {
-    return res.status(aiRes.status).json({ error: 'AI failed' });
+    const status = aiRes.status;
+    let errorText: string;
+    try {
+      errorText = (await aiRes.text()) || '(no response body)';
+    } catch (e) {
+      errorText = '(error reading response body)';
+    }
+    console.error(`Cohere API failed [status ${status}]: ${errorText}`);
+    return NextResponse.json(
+      { error: `Cohere API error ${status}: ${errorText}` },
+      { status: 502 }
+    );
   }
 
-  const { generatedText } = await aiRes.json();
-  res.status(200).json({ script: generatedText });
+  const { text } = await aiRes.json();
+  const script = (text || '').trim();
+
+  return NextResponse.json({ script });
+}
+
+export async function GET() {
+  return NextResponse.json(
+    { error: 'Method Not Allowed' },
+    { status: 405 }
+  );
 }

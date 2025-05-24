@@ -7,6 +7,7 @@ import { ONBOARDING_STEPS } from '@/constants/steps';
 import dynamic from 'next/dynamic';
 const ReactSelect = dynamic(() => import('react-select'), { ssr: false });
 import type { MultiValue } from 'react-select';
+import { useWizard } from '@/lib/context';
 
 
 type Step1Data = {
@@ -30,13 +31,14 @@ export default function Step1() {
     defaultValues: { languages: [], about: ''},
   });
 
+  const { save } = useWizard();
+
   const aboutValue = watch('about');
   const charCount = aboutValue.length;
 
   
   const onSubmit = (data: Step1Data) => {
-    console.log('Step 1 values:', data);
-    // for now, we just log and move to the next URL
+    save('1', data);
     router.push('/onboarding/2');
   };
 

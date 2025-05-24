@@ -34,10 +34,10 @@ export default function Step4() {
       <div style={{
         display:        'flex',
         flexDirection:  'column',
-        alignItems:     'center',
+        alignItems: 'center',
         justifyContent: 'center',
-        height:         '60vh',
-        textAlign:      'center',
+        height: '60vh',
+        textAlign: 'center',
       }}>
         {error ? (
           <>

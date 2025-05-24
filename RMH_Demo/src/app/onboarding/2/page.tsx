@@ -1,5 +1,6 @@
 'use client';
 import { useForm, useFieldArray } from 'react-hook-form';
+import { useWizard } from '@/lib/context';
 import { useRouter } from 'next/navigation';
 import { StepHeader } from '@/components/StepHeader';
 import { ONBOARDING_STEPS } from '@/constants/steps';
@@ -29,6 +30,7 @@ export default function Step2() {
   const { control, register, handleSubmit, formState: {errors}, watch } = useForm<Step2Data>({
     defaultValues: { skills: [], education: [], cert_award: [],},
   });
+  const { save } = useWizard();
 
 const {
     fields: skillFields,
@@ -51,8 +53,7 @@ const skills = watch("skills");
   } = useFieldArray({ control, name: 'cert_award' });
   
   const onSubmit = (data: Step2Data) => {
-    console.log('Step 2 values:', data);
-    // for now, we just log and move to the next URL
+    save('2', data);
     router.push('/onboarding/3');
   };
 
