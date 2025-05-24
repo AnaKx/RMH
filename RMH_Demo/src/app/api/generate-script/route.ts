@@ -28,14 +28,12 @@ export async function POST(request: NextRequest) {
 
   const prompt = `
 Carfully analize the following information: 
- First name:     ${form.firstName}
+First name:     ${form.firstName}
 Last name:      ${form.lastName}
 Display name:   ${form.displayName}
 Location:       ${form.location}
 Languages:      ${form.languages.join(', ')}
 About:          ${form.about}
-
-— Professional Info —
 Role:           ${form.role}
 Skills:         ${form.skills.map(s => s.name).join(', ')}
 Education:      ${form.education
