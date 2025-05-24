@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useWizard } from '@/lib/context';
 import { useReactMediaRecorder } from 'react-media-recorder';
 
+export const dynamic = 'force-dynamic';
+
 // Memoized video preview
 const VideoPreview = memo(({ stream }: { stream: MediaStream | null }) => {
   const videoRef = useRef<HTMLVideoElement>(null);

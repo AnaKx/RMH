@@ -164,7 +164,7 @@ export default function Step1() {
         </div>
       
 
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className=".btn-primary">
           Continue
         </button>
       </form>

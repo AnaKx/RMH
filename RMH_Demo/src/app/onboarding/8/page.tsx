@@ -32,6 +32,7 @@ export default function Step8() {
           You’re one step closer to connecting with the right mentees.
         </p>
         <button
+          className="btn btn-primary"
           onClick={() => router.push('/onboarding/1')} 
         >
           Continue
