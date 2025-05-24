@@ -83,7 +83,7 @@ const skills = watch("skills");
         </div> 
 
         <div style={{ marginBottom: '12px' }}>
-            <h2>Skills</h2>
+            <label htmlFor="skills">Skills</label><br/>
             <input
                 type="hidden"
                 {...register("skills", {
@@ -114,7 +114,7 @@ const skills = watch("skills");
         </div>
 
         <div style={{ marginBottom: '12px' }}>
-            <h2>Education</h2>
+            <label htmlFor="education">Education</label><br/>
             {eduFields.map((field, idx) => (
                 <div key={field.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 8 }}>
                 <input
@@ -151,7 +151,7 @@ const skills = watch("skills");
         </div>
 
         <div style={{ marginBottom: '12px' }}>
-            <h2>Certifications/Awards</h2>
+            <label htmlFor="cert_award">Certifications/Awards</label><br/>
             {eduFields.map((field, idx) => (
                 <div key={field.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 8 }}>
                 <input

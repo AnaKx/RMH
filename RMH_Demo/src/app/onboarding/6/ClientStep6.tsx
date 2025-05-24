@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useWizard } from '@/lib/context';
 import { useReactMediaRecorder } from 'react-media-recorder';
 
-// 1) Video preview that binds the MediaStream to a <video> tag
+// VideoPreview stays the same...
 const VideoPreview = memo(({ stream }: { stream: MediaStream | null }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
@@ -19,13 +19,20 @@ const VideoPreview = memo(({ stream }: { stream: MediaStream | null }) => {
       autoPlay
       muted
       playsInline
-      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover'
+      }}
     />
   );
 });
 VideoPreview.displayName = 'VideoPreview';
 
-// 2) Teleprompter auto-scroll
+// TeleprompterAuto: remove absolute positioning so it lives in its container
 const TeleprompterAuto = memo(({
   text,
   speed,
@@ -47,7 +54,9 @@ const TeleprompterAuto = memo(({
     };
     if (recording) step();
     return () => {
-      if (frameId !== null) cancelAnimationFrame(frameId);
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+      }
     };
   }, [recording, speed]);
 
@@ -55,19 +64,17 @@ const TeleprompterAuto = memo(({
     <div
       ref={tpRef}
       style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        maxHeight: '50%',
-        background: 'rgba(255,255,255,0.8)',
-        willChange: 'scrollTop',
-        padding: 16,
+        height: '100%',
         overflowY: 'auto',
+        background: 'transparent',
+        color: 'black',
+        fontSize: '1.2rem',
+        fontFamily: 'monospace',
+        lineHeight: 1.5,
       }}
     >
       {text.split('\n').map((line, i) => (
-        <p key={i} style={{ margin: '4px 0' }}>{line}</p>
+        <p key={i} style={{ margin: '8px 0' }}>{line}</p>
       ))}
     </div>
   );
@@ -79,22 +86,17 @@ export default function ClientStep6() {
   const { data, save } = useWizard();
   const script = data[4]?.script || '';
 
-  // 3) Recording hook
-  const {
-    status,
-    startRecording,
-    stopRecording,
-    previewStream,
-  } = useReactMediaRecorder({
-    video: true,
-    audio: true,
-    onStop: (blobUrl) => {
-      save(5, { mediaBlobUrl: blobUrl });
-      router.push('/onboarding/7');
-    },
-  });
+  const { status, startRecording, stopRecording, previewStream } =
+    useReactMediaRecorder({
+      video: true,
+      audio: true,
+      onStop: (blobUrl) => {
+        save(5, { mediaBlobUrl: blobUrl });
+        router.push('/onboarding/7');
+      },
+    });
 
-  // 4) Elapsed timer via ref (no React state to avoid re-renders)
+  // Timer via ref...
   const elapsedRef = useRef<HTMLSpanElement>(null);
   useEffect(() => {
     let seconds = 0;
@@ -110,22 +112,14 @@ export default function ClientStep6() {
         }
       }, 1000);
     }
-    return () => {
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   }, [status]);
 
-  // 5) Speed controls using a ref + forced update
+  // Speed controls
   const speedRef = useRef(1);
   const [, forceUpdate] = useReducer(n => n + 1, 0);
-  const decSpeed = () => {
-    speedRef.current = Math.max(0.1, +(speedRef.current - 0.1).toFixed(1));
-    forceUpdate();
-  };
-  const incSpeed = () => {
-    speedRef.current = Math.min(5, +(speedRef.current + 0.1).toFixed(1));
-    forceUpdate();
-  };
+  const decSpeed = () => { speedRef.current = Math.max(0.1, +(speedRef.current - 0.1).toFixed(1)); forceUpdate(); };
+  const incSpeed = () => { speedRef.current = Math.min(5, +(speedRef.current + 0.1).toFixed(1)); forceUpdate(); };
 
   return (
     <>
@@ -135,22 +129,38 @@ export default function ClientStep6() {
       <div
         style={{
           position: 'relative',
-          width: 640,
-          height: 360,
-          margin: '0 auto',
-          background: '#000',
-          borderRadius: 12,
+          width: '100vw',
+          height: 'calc(100vh - 120px)', // leaves space for the heading & intro text
+          margin: 0,
+          borderRadius: 0,
           overflow: 'hidden',
+          background: '#000',
         }}
       >
+        {/* camera feed */}
         <VideoPreview stream={previewStream || null} />
-        <TeleprompterAuto
-          text={script}
-          speed={speedRef.current}
-          recording={status === 'recording'}
-        />
+
+        {/* teleprompter overlay */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '25%',         // only top quarter of the video
+          background: 'rgba(255, 255, 255, 0.6)',
+          pointerEvents: 'none',
+          padding: '8px 16px',
+          boxSizing: 'border-box',
+        }}>
+          <TeleprompterAuto
+            text={script}
+            speed={speedRef.current}
+            recording={status === 'recording'}
+          />
+        </div>
       </div>
 
+      {/* Controls bar */}
       <div
         style={{
           position: 'fixed',

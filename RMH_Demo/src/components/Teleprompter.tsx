@@ -1,7 +1,13 @@
 'use client';
 import React, { useEffect, useRef } from 'react';
 
-export function Teleprompter({ text }: { text: string }) {
+export function Teleprompter({
+  text,
+  speed = 3,
+}: {
+  text: string;
+  speed?: number;
+}) {
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -11,24 +17,29 @@ export function Teleprompter({ text }: { text: string }) {
     el.scrollTop = 0;
     let frame: number;
     const step = () => {
-      el.scrollTop += 1;  
+      el.scrollTop += speed / 3;
       frame = requestAnimationFrame(step);
     };
     frame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frame);
-  }, [text]);
+  }, [text, speed]);
 
   return (
     <div
       ref={container}
       style={{
-        maxHeight: 200,
-        overflowY: 'hidden',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflowY: 'auto',
         padding: 16,
-        background: '#111',
+        background: 'rgba(17,17,17,0.9)',
         color: '#0f0',
         fontFamily: 'monospace',
         lineHeight: 1.5,
+        zIndex: 10,
       }}
     >
       {text.split('\n').map((line, i) => (
