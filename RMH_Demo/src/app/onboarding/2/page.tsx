@@ -185,7 +185,7 @@ const skills = watch("skills");
         </div>
       
 
-        <button type="submit" style={{ padding: '8px 16px' }}>
+        <button type="submit" className="btn btn-primary">
           Continue
         </button>
       </form>

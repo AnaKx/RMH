@@ -1,7 +1,7 @@
 'use client';
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { LANGUAGES_LIST } from '@/constants/languages';
+import { LANGUAGE_OPTIONS } from '@/constants/languages';
 import { StepHeader } from '@/components/StepHeader';
 import { ONBOARDING_STEPS } from '@/constants/steps';
 import dynamic from 'next/dynamic';
@@ -19,11 +19,6 @@ type Step1Data = {
   about: string;
   profilePicture: FileList;
 };
-
-export const LANGUAGE_OPTIONS = LANGUAGES_LIST.map(lang => ({
-  value: lang,
-  label: lang,
-}));
 
 export default function Step1() {
   const router = useRouter();
@@ -169,7 +164,7 @@ export default function Step1() {
         </div>
       
 
-        <button type="submit" style={{ padding: '8px 16px' }}>
+        <button type="submit" className="btn btn-primary">
           Continue
         </button>
       </form>
