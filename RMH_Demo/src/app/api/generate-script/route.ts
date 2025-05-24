@@ -23,10 +23,28 @@ type Step2Data = {
 type FormData = Step1Data & Step2Data;
 
 export async function POST(request: NextRequest) {
-  const { form } = (await request.json()) as { form:FormData };
+  const { form } = (await request.json()) as { form: FormData };
 
 
   const prompt = `
+Carfully analize the following information: 
+ First name:     ${form.firstName}
+Last name:      ${form.lastName}
+Display name:   ${form.displayName}
+Location:       ${form.location}
+Languages:      ${form.languages.join(', ')}
+About:          ${form.about}
+
+— Professional Info —
+Role:           ${form.role}
+Skills:         ${form.skills.map(s => s.name).join(', ')}
+Education:      ${form.education
+      .map(e => `${e.title} at ${e.university} (${e.year})`)
+      .join('; ')}
+Certifications: ${form.cert_award
+      .map(c => `${c.name} from ${c.from} (${c.year})`)
+      .join('; ')}
+
 You’re an AI scriptwriter. You must generate a spoken script where:
 • The Introduction takes up approximately 1/6 of the total time,
 • The Core Message takes up 2/3 of the total time,
@@ -43,9 +61,7 @@ You’re an AI scriptwriter. You must generate a spoken script where:
 • Keeps the language clear, engaging, and concise.  
 
 Output only the final script with these three headings—no extra labels or timestamps.
-${Object.entries(form)
-    .map(([k, v]) => `• ${k}: ${Array.isArray(v) ? v.join(', ') : v}`)
-    .join('\n')}
+
   `.trim();
 
   const aiRes = await fetch('https://api.cohere.ai/v1/chat', {

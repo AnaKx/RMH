@@ -53,7 +53,7 @@ const skills = watch("skills");
   } = useFieldArray({ control, name: 'cert_award' });
   
   const onSubmit = (data: Step2Data) => {
-    save('2', data);
+    save(2, data);
     router.push('/onboarding/3');
   };
 
@@ -180,7 +180,7 @@ const skills = watch("skills");
                 type="button"
                 onClick={() => appendEdu({ university: '', major: '', title: '', year: '' })}
             >
-                Add Education
+                Add Certification
             </button>
         </div>
       

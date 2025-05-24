@@ -38,7 +38,7 @@ export default function Step1() {
 
   
   const onSubmit = (data: Step1Data) => {
-    save('1', data);
+    save(1, data);
     router.push('/onboarding/2');
   };
 

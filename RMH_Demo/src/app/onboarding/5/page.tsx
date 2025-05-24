@@ -5,7 +5,7 @@ import { useWizard } from '@/lib/context';
 export default function Step5() {
   const router = useRouter();
   const { data } = useWizard();
-  const script = data['4']?.script || '';
+  const script = data[4]?.script || '';
 
   return (
     <>

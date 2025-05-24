@@ -12,15 +12,19 @@ export default function Step4() {
   useEffect(() => {
     (async () => {
       try {
+        console.log('Step4: sending form data:', data);
         const res = await fetch('/api/generate-script', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ form: data }),
+          body: JSON.stringify({ form: { ...data[1], ...data[2] } }),
         });
         if (!res.ok) throw new Error(`Status ${res.status}`);
         const { script } = await res.json();
-        save('4', { script });
-        router.push('/onboarding/5');
+        console.log('Step4: received script:', script);
+        save(4, { script });
+        console.log('Saved script into context:', script, data);
+        // router.push('/onboarding/5');
+        setTimeout(() => router.push('/onboarding/5'), 2000);
       } catch (err: any) {
         console.error(err);
         setError('Failed to generate script. Please try again.');
