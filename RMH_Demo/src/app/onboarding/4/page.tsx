@@ -6,12 +6,8 @@ import { useWizard } from '@/lib/context';
 
 export default function Step4() {
   const router = useRouter();
-  const { data, save } = useWizard();             // 1️⃣ grab all prior form data
+  const { data, save } = useWizard(); 
   const [error, setError] = useState<string | null>(null);
-
-  // We don’t actually need a `loading` boolean since
-  // this screen only renders while loading is true—
-  // once done we navigate away.
   
   useEffect(() => {
     (async () => {
@@ -23,8 +19,8 @@ export default function Step4() {
         });
         if (!res.ok) throw new Error(`Status ${res.status}`);
         const { script } = await res.json();
-        save(4, { script });                     // 2️⃣ store script under step 4
-        router.push('/onboarding/5');            // 3️⃣ go to the next screen
+        save('4', { script });
+        router.push('/onboarding/5');
       } catch (err: any) {
         console.error(err);
         setError('Failed to generate script. Please try again.');

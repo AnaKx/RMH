@@ -1,7 +1,5 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { StepHeader } from '@/components/StepHeader';
-import { ONBOARDING_STEPS } from '@/constants/steps';
 import { useWizard } from '@/lib/context';
 
 export default function Step7() {

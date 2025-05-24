@@ -1,7 +1,5 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { StepHeader } from '@/components/StepHeader';
-import { ONBOARDING_STEPS } from '@/constants/steps';
 import { useWizard } from '@/lib/context';
 
 export default function Step5() {
@@ -18,7 +16,7 @@ export default function Step5() {
       </p>
 
       <div>
-        {script.split('\n\n').map((para, i) => (
+          {script.split('\n\n').map((para: string, i: number) => (
           <p key={i} style={{ marginBottom: i < script.split('\n\n').length - 1 ? 16 : 0 }}>
             {para}
           </p>

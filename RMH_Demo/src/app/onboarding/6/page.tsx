@@ -1,7 +1,5 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { StepHeader } from '@/components/StepHeader';
-import { ONBOARDING_STEPS } from '@/constants/steps';
 import { useWizard } from '@/lib/context';
 import { useReactMediaRecorder } from 'react-media-recorder';
 
@@ -19,7 +17,7 @@ export default function Step6() {
     video: true,
     audio: true,
     onStop: (blobUrl) => {
-      save(5, { mediaBlobUrl: blobUrl });
+      save('5', { mediaBlobUrl: blobUrl });
       router.push('/onboarding/7');
     }
   });
@@ -39,7 +37,7 @@ export default function Step6() {
         margin: '24px 0',
         lineHeight: 1.5,
       }}>
-        {script.split('\n').map((line, i) => (
+        {script.split('\n').map((line: string, i: number) => (
           <p key={i} style={{ margin: '8px 0' }}>{line}</p>
         ))}
       </div>

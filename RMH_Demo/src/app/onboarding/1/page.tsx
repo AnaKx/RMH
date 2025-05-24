@@ -2,9 +2,12 @@
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { LANGUAGES_LIST } from '@/constants/languages';
-import ReactSelect from 'react-select';
 import { StepHeader } from '@/components/StepHeader';
 import { ONBOARDING_STEPS } from '@/constants/steps';
+import dynamic from 'next/dynamic';
+const ReactSelect = dynamic(() => import('react-select'), { ssr: false });
+import type { MultiValue } from 'react-select';
+
 
 type Step1Data = {
   firstName: string;
@@ -104,9 +107,14 @@ export default function Step1() {
               {...field}
               isMulti
               options={LANGUAGE_OPTIONS}
-              onChange={selected =>
-                field.onChange(selected.map(o => o.value))
-              }
+              onChange={(
+                newValue,
+                _actionMeta
+              ) => {
+                // Cast incoming value to correct type
+                const selected = newValue as MultiValue<{ value: string; label: string }>;
+                field.onChange(selected.map((o: { value: string; label: string }) => o.value));
+              }}
               value={LANGUAGE_OPTIONS.filter(o =>
                 field.value.includes(o.value)
               )}
