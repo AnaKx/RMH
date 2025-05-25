@@ -141,8 +141,8 @@ export default function ClientStep6() {
         <div style={{
           position: 'absolute',
           top: '10px',
-          left: '25%',
-          right: '25%',
+          left: '30%',
+          right: '30%',
           height: '30%',
           background: 'rgba(255, 255, 255, 0.4)',
           pointerEvents: 'none',
