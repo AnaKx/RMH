@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 
 export function Teleprompter({
   text,
-  speed = 3,
+  speed = 0.1,
 }: {
   text: string;
   speed?: number;
@@ -17,7 +17,7 @@ export function Teleprompter({
     el.scrollTop = 0;
     let frame: number;
     const step = () => {
-      el.scrollTop += speed / 3;
+      el.scrollTop += speed;
       frame = requestAnimationFrame(step);
     };
     frame = requestAnimationFrame(step);

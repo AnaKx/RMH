@@ -116,16 +116,13 @@ export default function ClientStep6() {
   }, [status]);
 
   // Speed controls
-  const speedRef = useRef(1);
+  const speedRef = useRef(0.1);
   const [, forceUpdate] = useReducer(n => n + 1, 0);
-  const decSpeed = () => { speedRef.current = Math.max(0.1, +(speedRef.current - 0.1).toFixed(1)); forceUpdate(); };
-  const incSpeed = () => { speedRef.current = Math.min(5, +(speedRef.current + 0.1).toFixed(1)); forceUpdate(); };
+  const decSpeed = () => { speedRef.current = Math.max(0.01, +(speedRef.current - 0.01).toFixed(1)); forceUpdate(); };
+  const incSpeed = () => { speedRef.current = Math.min(1, +(speedRef.current + 0.01).toFixed(1)); forceUpdate(); };
 
   return (
     <>
-      <h1>Record Your Intro Video</h1>
-      <p>Follow the script below. When you’re ready, hit “Start Recording.”</p>
-
       <div
         style={{
           position: 'relative',
@@ -143,14 +140,15 @@ export default function ClientStep6() {
         {/* teleprompter overlay */}
         <div style={{
           position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '25%',         // only top quarter of the video
-          background: 'rgba(255, 255, 255, 0.6)',
+          top: '10px',
+          left: '25%',
+          right: '25%',
+          height: '30%',
+          background: 'rgba(255, 255, 255, 0.4)',
           pointerEvents: 'none',
           padding: '8px 16px',
           boxSizing: 'border-box',
+          borderRadius: '8px',
         }}>
           <TeleprompterAuto
             text={script}
@@ -163,11 +161,11 @@ export default function ClientStep6() {
       {/* Controls bar */}
       <div
         style={{
-          position: 'fixed',
+          position: 'absolute',
           bottom: 32,
           left: '50%',
           transform: 'translateX(-50%)',
-          background: 'rgba(0,0,0,0.8)',
+          background: '#001434',
           borderRadius: 8,
           padding: '8px 16px',
           display: 'flex',
@@ -180,11 +178,11 @@ export default function ClientStep6() {
         <button
           onClick={status === 'recording' ? stopRecording : startRecording}
           style={{
-            background: status === 'recording' ? '#dc2626' : '#0ea5e9',
+            background: status === 'recording' ? '#dc2626' : '#001434',
             color: 'white',
             padding: '10px 20px',
             border: 'none',
-            borderRadius: 8,
+            borderRadius: 12,
             cursor: 'pointer',
             fontSize: 18,
             fontWeight: 600,
@@ -198,7 +196,7 @@ export default function ClientStep6() {
           style={{ minWidth: 40, fontVariantNumeric: 'tabular-nums', fontSize: 18 }}
         />
 
-        <button onClick={decSpeed} style={{ color: 'white', fontSize: 18 }}>–</button>
+        <button onClick={decSpeed} style={{ color: 'white', fontSize: 18, backgroundColor: '#001434' }}>–</button>
         <span style={{ color: 'white' }}>{speedRef.current.toFixed(1)}×</span>
         <button onClick={incSpeed} style={{ color: 'white', fontSize: 18 }}>+</button>
       </div>
