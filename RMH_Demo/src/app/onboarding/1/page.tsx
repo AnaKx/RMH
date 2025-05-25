@@ -22,7 +22,7 @@ type Step1Data = {
 
 export default function Step1() {
   const router = useRouter();
-  const { control, register, watch, handleSubmit } = useForm<Step1Data>({
+  const { control, register, watch, handleSubmit, formState: { errors } } = useForm<Step1Data>({
     defaultValues: { languages: [], about: ''},
   });
 
@@ -56,40 +56,60 @@ export default function Step1() {
           <label htmlFor="firstName">First name</label><br/>
           <input
             id="firstName"
-            {...register('firstName')}
+            {...register('firstName', { required: 'First name is required' })}
             required
             style={{ width: '100%', padding: '8px' }}
           />
+          {errors.firstName && (
+            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
+              {errors.firstName.message}
+            </p>
+          )}
         </div>
 
         <div style={{ marginBottom: '12px'}}>
           <label htmlFor='lastName'>Last name</label><br/>
           <input
           id="lastName"
-          {...register('lastName')}
+          {...register('lastName', { required: 'Last name is required' })}
           required
           style={{ width: '100%', padding: '8px'}}
           />
+          {errors.lastName && (
+            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
+              {errors.lastName.message}
+            </p>
+          )}
         </div>
 
         <div style={{ marginBottom: '12px'}}>
           <label htmlFor='displayName'>Display name</label><br/>
           <input
           id="displayName"
-          {...register('displayName')}
+          {...register('displayName', { required: 'Display name is required' })}
           required
           style={{ width: '100%', padding: '8px'}}
           />
+          {errors.displayName && (
+            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
+              {errors.displayName.message}
+            </p>
+          )}
         </div>
 
         <div style={{ marginBottom: '12px'}}>
           <label htmlFor='location'>Location</label><br/>
           <input
           id="location"
-          {...register('location')}
+          {...register('location', { required: 'Location is required' })}
           required
           style={{ width: '100%', padding: '8px'}}
           />
+          {errors.location && (
+            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
+              {errors.location.message}
+            </p>
+          )}
         </div>
         
 
@@ -98,7 +118,7 @@ export default function Step1() {
         <Controller
           name="languages"
           control={control} 
-          rules={{ required: true }}
+          rules={{ required: 'Please select at least one language' }}
           render={({ field }) => (
             <ReactSelect
               {...field}
@@ -118,6 +138,11 @@ export default function Step1() {
             />
           )}
         />
+        {errors.languages && (
+          <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
+            {errors.languages.message}
+          </p>
+        )}
         </div>
 
       <div style={{ marginBottom: '12px'}}>
@@ -150,6 +175,11 @@ export default function Step1() {
             <span>At least 150 characters</span>
             <span>{charCount}/500</span>
           </div>
+          {errors.about && (
+            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
+              {errors.about.message}
+            </p>
+          )}
         </div>
 
       <div style={{ marginBottom: '12px'}}>
@@ -159,8 +189,13 @@ export default function Step1() {
           type="file"
           accept="image/*"
           style={{ width: '100%', padding: '8px'}}
-          {...register('profilePicture', {required: true})}
+          {...register('profilePicture', {required: 'Profile picture is required'})}
           />
+          {errors.profilePicture && (
+            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
+              {errors.profilePicture.message}
+            </p>
+          )}
         </div>
       
 

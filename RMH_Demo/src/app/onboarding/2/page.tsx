@@ -76,10 +76,14 @@ const skills = watch("skills");
           <label htmlFor="role">Role</label><br/>
           <input
             id="role"
-            {...register('role')}
-            required
+            {...register('role', { required: true })}
             style={{ width: '100%', padding: '8px' }}
           />
+          {errors.role && (
+            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: 4 }}>
+              Role is required
+            </p>
+          )}
         </div> 
 
         <div style={{ marginBottom: '12px' }}>
@@ -91,9 +95,11 @@ const skills = watch("skills");
                     arr.length > 0 || "You must add at least one skill",
                 })}
             />
-            {errors.skills && (
-                <p style={{ color: "red" }}>{errors.skills.message}</p>
-            )}
+          {errors.skills && (
+            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: 4 }}>
+              At least one skill is required
+            </p>
+          )}
             {skillFields.map((field, idx) => (
                 <div key={field.id} style={{ display: 'flex', gap: 8 }}>
                 <input
@@ -119,17 +125,17 @@ const skills = watch("skills");
                 <div key={field.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 8 }}>
                 <input
                     placeholder="University Name"
-                    {...register(`education.${idx}.university` as const, { required: true })}
+                    {...register(`education.${idx}.university` as const)}
                 />
                 <input
                     placeholder="Major"
-                    {...register(`education.${idx}.major` as const, { required: true })}
+                    {...register(`education.${idx}.major` as const)}
                 />
                 <input
                     placeholder="Title"
-                    {...register(`education.${idx}.title` as const, { required: true })}
+                    {...register(`education.${idx}.title` as const)}
                 />
-                <select {...register(`education.${idx}.year` as const, { required: true })}>
+                <select {...register(`education.${idx}.year` as const)}>
                     <option value="">Year</option>
                     {Array.from({ length: 50 }, (_, i) => 1970 + i).map(y => (
                     <option key={y} value={String(y)}>
@@ -152,18 +158,18 @@ const skills = watch("skills");
 
         <div style={{ marginBottom: '12px' }}>
             <label htmlFor="cert_award">Certifications/Awards</label><br/>
-            {eduFields.map((field, idx) => (
-                <div key={field.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 8 }}>
+            {certFields.map((field, idx) => (
+                <div key={field.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
                 <input
                     placeholder="Certificate"
-                    {...register(`cert_award.${idx}.name` as const, { required: true })}
+                    {...register(`cert_award.${idx}.name` as const)}
                 />
                 <input
                     placeholder="Certified from"
-                    {...register(`cert_award.${idx}.from` as const, { required: true })}
+                    {...register(`cert_award.${idx}.from` as const)}
                 />
                 
-                <select {...register(`cert_award.${idx}.year` as const, { required: true })}>
+                <select {...register(`cert_award.${idx}.year` as const)}>
                     <option value="">Year</option>
                     {Array.from({ length: 50 }, (_, i) => 1970 + i).map(y => (
                     <option key={y} value={String(y)}>
@@ -171,14 +177,14 @@ const skills = watch("skills");
                     </option>
                     ))}
                 </select>
-                <button type="button" onClick={() => removeEdu(idx)}>
+                <button type="button" onClick={() => removeCert(idx)}>
                     Remove
                 </button>
                 </div>
             ))}
             <button
                 type="button"
-                onClick={() => appendEdu({ university: '', major: '', title: '', year: '' })}
+                onClick={() => appendCert({ name: '', from: '', year: '' })}
             >
                 Add Certification
             </button>
