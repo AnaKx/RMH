@@ -119,24 +119,25 @@ export default function ClientStep6() {
   // Timer via ref...
   const elapsedRef = useRef<HTMLSpanElement>(null);
   useEffect(() => {
-    let seconds = 0;
-    let interval: NodeJS.Timeout;
-    if (status === 'recording') {
-      if (elapsedRef.current) elapsedRef.current.textContent = '0:00';
-      interval = setInterval(() => {
-        seconds++;
-        if (elapsedRef.current) {
-          const m = Math.floor(seconds / 60);
-          const s = String(seconds % 60).padStart(2, '0');
-          elapsedRef.current.textContent = `${m}:${s}`;
-        }
-      }, 85);
-    }
-    return () => clearInterval(interval);
+let seconds = 0;
+  let interval: NodeJS.Timeout;
+  if (status === 'recording') {
+    if (elapsedRef.current) elapsedRef.current.textContent = '0:00';
+    // Count once every real second (1000ms) so MM:SS matches real time
+    interval = setInterval(() => {
+      seconds++;
+      if (elapsedRef.current) {
+        const m = Math.floor(seconds / 60);
+        const s = String(seconds % 60).padStart(2, '0');
+        elapsedRef.current.textContent = `${m}:${s}`;
+      }
+    }, 1000);
+  }
+ return () => void clearInterval(interval);
   }, [status]);
 
   // Speed controls
-  const speedRef = useRef(85);
+  const speedRef = useRef(65);
   const [, forceUpdate] = useReducer(n => n + 1, 0);
   const decSpeed = () => {
     speedRef.current = Math.max(1, speedRef.current - 1);
@@ -153,7 +154,7 @@ export default function ClientStep6() {
         style={{
           position: 'relative',
           width: '100vw',
-          height: 'calc(100vh - 120px)', // leaves space for the heading & intro text
+          height: 'calc(100vh - 120px)',
           margin: 0,
           borderRadius: 0,
           overflow: 'hidden',
@@ -183,7 +184,7 @@ export default function ClientStep6() {
           />
         </div>
       </div>
-      
+
       <div
         style={{
           position: 'absolute',

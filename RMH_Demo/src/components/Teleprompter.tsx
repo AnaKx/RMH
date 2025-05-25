@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 export function Teleprompter({
   text,
-  speed = 85,    // default to 8ms per pixel, matching your example
+  speed = 65,
 }: {
   text: string;
   speed?: number;
@@ -11,7 +11,6 @@ export function Teleprompter({
   const container = useRef<HTMLDivElement>(null);
   const [play, setPlay] = useState(true);
 
-  // Toggle play/pause on backtick (`) key
   useEffect(() => {
     const keyDownTextField = (e: KeyboardEvent) => {
       if (e.key === '`') {
