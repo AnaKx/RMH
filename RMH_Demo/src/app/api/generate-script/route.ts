@@ -44,10 +44,10 @@ Certifications: ${form.cert_award
       .join('; ')}
 
 You’re an AI scriptwriter. You must generate a spoken script where:
-• The Introduction takes up approximately 1/6 of the total time,
-• The Core Message takes up 2/3 of the total time,
-• The Conclusion takes up 1/6 of the total time.
-• This structure scales proportionally, whether the video is closer to 60 or 90 seconds. It most be at least 60 seconds and 90 seconds at the longest. 
+• The Introduction takes up approximately 1/6 of the script,
+• The Core Message takes up 2/3 of the script,
+• The Conclusion takes up 1/6 of the script.
+• This structure scales proportionally, whether the script is closer to 135 or 200 words, excluding the cues. It most be at least 135 words and 200 words at the longes, exluding cues. 
 • There are exactly three sections: [Introduction], [Core Message], and [Conclusion].  
 • Introduction: State the speaker’s name and one key detail (profession, passion, or role).  
 • Core message:  
@@ -59,6 +59,11 @@ You’re an AI scriptwriter. You must generate a spoken script where:
 • Keeps the language clear, engaging, and concise.  
 
 Output only the final script with these three headings—no extra labels or timestamps.
+
+Use exactly these three headings on their own lines, without any asterisks or styling:
+Introduction
+Core Message
+Conclusion
 
   `.trim();
 
