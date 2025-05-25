@@ -1,67 +1,59 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, CSSProperties } from 'react';
 
 export function Teleprompter({
   text,
   speed = 65,
+  style,
 }: {
   text: string;
   speed?: number;
+  style?: CSSProperties;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const [play, setPlay] = useState(true);
 
   useEffect(() => {
-    const keyDownTextField = (e: KeyboardEvent) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === '`') {
         e.preventDefault();
-        setPlay(p => !p);
+        setPlay((p) => !p);
       }
     };
-    window.addEventListener('keydown', keyDownTextField);
-    return () => {
-      window.removeEventListener('keydown', keyDownTextField);
-    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // Scroll logic using setInterval
   useEffect(() => {
-    const el = container.current;
-    if (!el) return;
+    const el = container.current!;
     el.scrollTop = 0;
-    const interval = setInterval(() => {
+    const tick = () => {
       if (!play) return;
-      const scrollTop = el.scrollTop;
-      const scrollHeight = el.scrollHeight;
-      const clientHeight = el.clientHeight;
-      if (scrollTop + clientHeight >= scrollHeight) {
-        el.scrollTop = 0;
-      } else {
-        el.scrollTop = scrollTop + 1;
-      }
-    }, speed);
-
-    return () => clearInterval(interval);
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      el.scrollTop =
+        scrollTop + clientHeight >= scrollHeight ? 0 : scrollTop + 1;
+    };
+    const iv = setInterval(tick, speed);
+    return () => clearInterval(iv);
   }, [text, play, speed]);
 
   return (
     <div
       ref={container}
       style={{
-        position: 'absolute',
-        top: 0, bottom: 0, left: 0, right: 0,
-        overflowY: 'hidden',
+        overflow: 'hidden',
         padding: 16,
-        background: 'rgba(17,17,17,0.9)',
+        background: 'rgba(17,17,17,0.6)',
         color: '#0f0',
         fontFamily: 'monospace',
         lineHeight: 1.5,
-        zIndex: 10,
+        pointerEvents: 'none',
+        ...style,
       }}
     >
-      {text.split('\n').map((line, i) => (
+      {text.split('\n').map((l, i) => (
         <p key={i} style={{ margin: '8px 0' }}>
-          {line}
+          {l}
         </p>
       ))}
     </div>
