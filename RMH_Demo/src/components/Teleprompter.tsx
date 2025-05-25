@@ -1,39 +1,57 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export function Teleprompter({
   text,
-  speed = 0.1,
+  speed = 85,    // default to 8ms per pixel, matching your example
 }: {
   text: string;
   speed?: number;
 }) {
   const container = useRef<HTMLDivElement>(null);
+  const [play, setPlay] = useState(true);
 
+  // Toggle play/pause on backtick (`) key
+  useEffect(() => {
+    const keyDownTextField = (e: KeyboardEvent) => {
+      if (e.key === '`') {
+        e.preventDefault();
+        setPlay(p => !p);
+      }
+    };
+    window.addEventListener('keydown', keyDownTextField);
+    return () => {
+      window.removeEventListener('keydown', keyDownTextField);
+    };
+  }, []);
+
+  // Scroll logic using setInterval
   useEffect(() => {
     const el = container.current;
     if (!el) return;
-    // Reset and start smooth scroll
     el.scrollTop = 0;
-    let frame: number;
-    const step = () => {
-      el.scrollTop += speed;
-      frame = requestAnimationFrame(step);
-    };
-    frame = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(frame);
-  }, [text, speed]);
+    const interval = setInterval(() => {
+      if (!play) return;
+      const scrollTop = el.scrollTop;
+      const scrollHeight = el.scrollHeight;
+      const clientHeight = el.clientHeight;
+      if (scrollTop + clientHeight >= scrollHeight) {
+        el.scrollTop = 0;
+      } else {
+        el.scrollTop = scrollTop + 1;
+      }
+    }, speed);
+
+    return () => clearInterval(interval);
+  }, [text, play, speed]);
 
   return (
     <div
       ref={container}
       style={{
         position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        overflowY: 'auto',
+        top: 0, bottom: 0, left: 0, right: 0,
+        overflowY: 'hidden',
         padding: 16,
         background: 'rgba(17,17,17,0.9)',
         color: '#0f0',

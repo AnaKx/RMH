@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, memo, useReducer } from 'react';
+import React, { useEffect, useRef, memo, useReducer, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useWizard } from '@/lib/context';
 import { useReactMediaRecorder } from 'react-media-recorder';
@@ -43,22 +43,42 @@ const TeleprompterAuto = memo(({
   recording: boolean;
 }) => {
   const tpRef = useRef<HTMLDivElement>(null);
+  const [play, setPlay] = useState(true);
+  const speedRefLocal = useRef(speed);
+  useEffect(() => {
+    speedRefLocal.current = speed;
+  }, [speed]);
 
   useEffect(() => {
-    let frameId: number | null = null;
-    const step = () => {
-      if (tpRef.current && recording) {
-        tpRef.current.scrollTop += speed;
-        frameId = requestAnimationFrame(step);
+    const el = tpRef.current;
+    if (!el) return;
+    el.scrollTop = 0;
+    // Handler for toggling play on backtick
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === '`') {
+        e.preventDefault();
+        setPlay(p => !p);
       }
     };
-    if (recording) step();
+    window.addEventListener('keydown', handleKey);
+
+    let currentScroll = 0;
+    const scrollFn = () => {
+      if (!play) return;
+      currentScroll = el.scrollTop;
+      if (el.scrollTop + el.clientHeight >= el.scrollHeight) {
+        el.scrollTop = 0;
+      } else {
+        el.scrollTop = currentScroll + 1;
+      }
+    };
+    const interval = setInterval(scrollFn, speedRefLocal.current);
+
     return () => {
-      if (frameId !== null) {
-        cancelAnimationFrame(frameId);
-      }
+      clearInterval(interval);
+      window.removeEventListener('keydown', handleKey);
     };
-  }, [recording, speed]);
+  }, [text, play]);
 
   return (
     <div
@@ -110,16 +130,22 @@ export default function ClientStep6() {
           const s = String(seconds % 60).padStart(2, '0');
           elapsedRef.current.textContent = `${m}:${s}`;
         }
-      }, 1000);
+      }, 85);
     }
     return () => clearInterval(interval);
   }, [status]);
 
   // Speed controls
-  const speedRef = useRef(0.1);
+  const speedRef = useRef(85);
   const [, forceUpdate] = useReducer(n => n + 1, 0);
-  const decSpeed = () => { speedRef.current = Math.max(0.01, +(speedRef.current - 0.01).toFixed(1)); forceUpdate(); };
-  const incSpeed = () => { speedRef.current = Math.min(1, +(speedRef.current + 0.01).toFixed(1)); forceUpdate(); };
+  const decSpeed = () => {
+    speedRef.current = Math.max(1, speedRef.current - 1);
+    forceUpdate();
+  };
+  const incSpeed = () => {
+    speedRef.current = speedRef.current + 1;
+    forceUpdate();
+  };
 
   return (
     <>
@@ -157,8 +183,7 @@ export default function ClientStep6() {
           />
         </div>
       </div>
-
-      {/* Controls bar */}
+      
       <div
         style={{
           position: 'absolute',
@@ -195,10 +220,6 @@ export default function ClientStep6() {
           ref={elapsedRef}
           style={{ minWidth: 40, fontVariantNumeric: 'tabular-nums', fontSize: 18 }}
         />
-
-        <button onClick={decSpeed} style={{ color: 'white', fontSize: 18, backgroundColor: '#001434' }}>–</button>
-        <span style={{ color: 'white' }}>{speedRef.current.toFixed(1)}×</span>
-        <button onClick={incSpeed} style={{ color: 'white', fontSize: 18 }}>+</button>
       </div>
     </>
   );
