@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic';
 const ReactSelect = dynamic(() => import('react-select'), { ssr: false });
 import type { MultiValue } from 'react-select';
 import { useWizard } from '@/lib/context';
+import '@/globals.css';
 
 
 type Step1Data = {
@@ -39,8 +40,8 @@ export default function Step1() {
 
   return (
     <>
+    <div className='center-content'>
       <StepHeader steps={ONBOARDING_STEPS} current={1} />
-
       <h1 style={{ fontSize: '1.5rem', marginBottom: 8 }}>
         Personal Info
       </h1>
@@ -50,73 +51,77 @@ export default function Step1() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        style={{ padding: '16px', maxWidth: 400, margin: '0 auto' }}
+        
       >
-        <div style={{ marginBottom: '12px' }}>
+        <div className="form-field required">
           <label htmlFor="firstName">First name</label><br/>
           <input
             id="firstName"
+            className="input-control"
             {...register('firstName', { required: 'First name is required' })}
             required
-            style={{ width: '100%', padding: '8px' }}
           />
           {errors.firstName && (
-            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
-              {errors.firstName.message}
-            </p>
+            <div className="error-wrapper">
+              <p className="error-message">{errors.firstName.message}</p>
+            </div>
           )}
         </div>
 
-        <div style={{ marginBottom: '12px'}}>
+        <div className="form-field required">
           <label htmlFor='lastName'>Last name</label><br/>
           <input
           id="lastName"
+          className="input-control"
           {...register('lastName', { required: 'Last name is required' })}
           required
           style={{ width: '100%', padding: '8px'}}
           />
           {errors.lastName && (
-            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
-              {errors.lastName.message}
-            </p>
+            <div className="error-wrapper">
+              <p className="error-message">{errors.lastName.message}</p>
+            </div>
           )}
         </div>
 
-        <div style={{ marginBottom: '12px'}}>
+        <div className="form-field required">
           <label htmlFor='displayName'>Display name</label><br/>
           <input
           id="displayName"
+          className="input-control"
           {...register('displayName', { required: 'Display name is required' })}
           required
           style={{ width: '100%', padding: '8px'}}
           />
           {errors.displayName && (
-            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
-              {errors.displayName.message}
-            </p>
+            <div className="error-wrapper">
+              <p className="error-message">{errors.displayName.message}</p>
+            </div>
           )}
         </div>
 
-        <div style={{ marginBottom: '12px'}}>
+        <div className="form-field required">
           <label htmlFor='location'>Location</label><br/>
           <input
           id="location"
+          className="input-control"
           {...register('location', { required: 'Location is required' })}
           required
           style={{ width: '100%', padding: '8px'}}
           />
           {errors.location && (
-            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
-              {errors.location.message}
-            </p>
+            <div className="error-wrapper">
+              <p className="error-message">{errors.location.message}</p>
+            </div>
           )}
         </div>
         
 
-        <div style={{ marginBottom: '12px' }}>
+        <div className="form-field">
         <label htmlFor="languages">Languages</label>
         <Controller
           name="languages"
+    
           control={control} 
           rules={{ required: 'Please select at least one language' }}
           render={({ field }) => (
@@ -128,7 +133,6 @@ export default function Step1() {
                 newValue,
                 _actionMeta
               ) => {
-                // Cast incoming value to correct type
                 const selected = newValue as MultiValue<{ value: string; label: string }>;
                 field.onChange(selected.map((o: { value: string; label: string }) => o.value));
               }}
@@ -139,16 +143,17 @@ export default function Step1() {
           )}
         />
         {errors.languages && (
-          <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
-            {errors.languages.message}
-          </p>
+          <div className="error-wrapper">
+            <p className="error-message">{errors.languages.message}</p>
+          </div>
         )}
         </div>
 
-      <div style={{ marginBottom: '12px'}}>
+      <div className="form-field required">
           <label htmlFor='about'>About</label><br/>
           <textarea
           id="about"
+          className="input-control"
           rows={4}
           placeholder='Tell us about yourself'
             {...register('about', {
@@ -176,33 +181,35 @@ export default function Step1() {
             <span>{charCount}/500</span>
           </div>
           {errors.about && (
-            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
-              {errors.about.message}
-            </p>
+            <div className="error-wrapper">
+              <p className="error-message">{errors.about.message}</p>
+            </div>
           )}
         </div>
 
-      <div style={{ marginBottom: '12px'}}>
+      <div className="form-field required">
           <label htmlFor='profilePicture'>Profile Picture</label><br/>
           <input
           id="profilePicture"
+          className="input-control"
           type="file"
           accept="image/*"
           style={{ width: '100%', padding: '8px'}}
           {...register('profilePicture', {required: 'Profile picture is required'})}
           />
           {errors.profilePicture && (
-            <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px' }}>
-              {errors.profilePicture.message}
-            </p>
+            <div className="error-wrapper">
+              <p className="error-message">{errors.profilePicture.message}</p>
+            </div>
           )}
         </div>
       
 
-        <button type="submit" className=".btn-primary">
+        <button type="submit" className="button">
           Continue
         </button>
       </form>
+    </div>
     </>
   );
 }

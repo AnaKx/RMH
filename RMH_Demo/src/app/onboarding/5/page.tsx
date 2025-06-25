@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useWizard } from '@/lib/context';
+import '@/globals.css';
 
 export default function Step5() {
   const router = useRouter();
@@ -9,6 +10,7 @@ export default function Step5() {
 
   return (
     <>
+    <div className='center-content'>
       <h1>Your Script Is Ready. Let’s Record!</h1>
       <p style={{ marginBottom: 24 }}>
         Start recording your video now—here are a few suggestions.
@@ -23,11 +25,10 @@ export default function Step5() {
         ))}
       </div>
 
-      <button
-        onClick={() => router.push('/onboarding/6')}
-      >
+      <button onClick={() => router.push('/onboarding/6')} className="button">
         Start Recording
       </button>
+      </div>
     </>
   );
 }

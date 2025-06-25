@@ -99,7 +99,7 @@ export default function Step8() {
   }, [mediaBlobUrl, data, save, router]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', textAlign: 'center' }}>
+    <div className='center-content'>
       {error ? (
         <>
           <p style={{ color: 'red', marginBottom: '1rem' }}>{error}</p>

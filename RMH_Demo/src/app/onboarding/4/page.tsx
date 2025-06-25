@@ -34,7 +34,7 @@ export default function Step4() {
 
   return (
     <>
-
+      <div className='center-content'>
       <div style={{
         display:        'flex',
         flexDirection:  'column',
@@ -51,14 +51,7 @@ export default function Step4() {
                 setError(null);
                 router.refresh();
               }}
-              style={{
-                padding: '0.5rem 1rem',
-                background: '#0ea5e9',
-                color: 'white',
-                border: 'none',
-                borderRadius: 4,
-                cursor: 'pointer',
-              }}
+              className="button"
             >
               Try Again
             </button>
@@ -91,6 +84,7 @@ export default function Step4() {
             `}</style>
           </>
         )}
+      </div>
       </div>
     </>
   );

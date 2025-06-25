@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import '@/globals.css';
 
 export default function Step3() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function Step3() {
 
   return (
     <>
-
+    <div className='center-content'>
       <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem' }}>
         Bring Your Profile to Life with a Short Intro Video
       </h1>
@@ -61,11 +62,11 @@ export default function Step3() {
         </ul>
       </div>
 
-      <button
-        onClick={handleContinue}
-      >
+      <button onClick={handleContinue} className="button">
         Continue
       </button>
+      </div>
     </>
+    
   );
 }

@@ -14,6 +14,7 @@ const VideoPreview = memo(({ stream }: { stream: MediaStream | null }) => {
     }
   }, [stream]);
   return (
+
     <video
       ref={videoRef}
       autoPlay

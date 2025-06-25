@@ -32,10 +32,10 @@ First name:     ${form.firstName}
 Last name:      ${form.lastName}
 Display name:   ${form.displayName}
 Location:       ${form.location}
-Languages:      ${form.languages.join(', ')}
+Languages: ${Array.isArray(form.languages) ? form.languages.join(', ') : 'N/A'}
 About:          ${form.about}
 Role:           ${form.role}
-Skills:         ${form.skills.map(s => s.name).join(', ')}
+Skills: ${Array.isArray(form.skills) ? form.skills.map(s => s.name).join(', ') : 'N/A'}
 Education:      ${form.education
       .map(e => `${e.title} at ${e.university} (${e.year})`)
       .join('; ')}

@@ -4,6 +4,7 @@ import { useWizard } from '@/lib/context';
 import { useRouter } from 'next/navigation';
 import { StepHeader } from '@/components/StepHeader';
 import { ONBOARDING_STEPS } from '@/constants/steps';
+import '@/globals.css';
 
 type EducationEntry = {
   university: string;
@@ -59,6 +60,7 @@ const skills = watch("skills");
 
   return (
     <>
+    <div className='center-content'>
       <StepHeader steps={ONBOARDING_STEPS} current={2} />
 
       <h1 style={{ fontSize: '1.5rem', marginBottom: 8 }}>
@@ -191,10 +193,11 @@ const skills = watch("skills");
         </div>
       
 
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="button">
           Continue
         </button>
       </form>
+    </div>
     </>
   );
 }
