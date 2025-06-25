@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useWizard } from '@/lib/context';
 
-type ShotstackResponse = { id: string };
-
 export default function Step8() {
   const router = useRouter();
   const { data, save } = useWizard();
@@ -15,14 +13,15 @@ export default function Step8() {
   const mediaBlobUrl = data[5]?.mediaBlobUrl;
 
   useEffect(() => {
-    (async () => {
-      if (!mediaBlobUrl) {
-        setError('No video found to process.');
-        return;
-      }
+    const sessionKey = 'video-rendering';
+    if (!mediaBlobUrl) return;
+    sessionStorage.removeItem(sessionKey);
+    sessionStorage.setItem(sessionKey, 'true');
 
+    let isMounted = true;
+
+    (async () => {
       try {
-        // Upload and trigger edit
         const blobRes = await fetch(mediaBlobUrl);
         const blob = await blobRes.blob();
         const file = new File([blob], 'demo.mp4', { type: 'video/mp4' });
@@ -38,56 +37,79 @@ export default function Step8() {
           body: formData,
         });
 
-        if (!res.ok) throw new Error(`Shotstack API error: ${res.status}`);
+        console.log('Response from /api/edit-video:', res);
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error('Shotstack API error body:', errorText);
+          throw new Error(`Shotstack API error: ${res.status}`);
+        }
         const result = await res.json();
+        console.log('Full result from /api/edit-video:', result);
+        console.log('Render ID returned:', result.id);
 
-        
         if (!result?.id) throw new Error('No render job ID returned.');
 
+        if (!isMounted) return;
         setPolling(true);
         setProgressText('Rendering your video…');
 
-        // Poll for render status
         let done = false;
         let tries = 0;
-        while (!done && tries < 40) { // approx. 3 mins max
+        while (!done && tries < 40 && isMounted) {
           await new Promise(res => setTimeout(res, 4500));
           tries++;
+
           const statusRes = await fetch(
-            `https://api.shotstack.io/edit/stage/assets/${result.id}`,
+            `https://api.shotstack.io/stage/render/${result.id}`,
             {
-              headers: { 'x-api-key': process.env.SHOTSTACK_API_KEY! },
+              headers: { 'x-api-key': process.env.NEXT_PUBLIC_SHOTSTACK_API_KEY!,
+                'Accept': 'application/json'
+               },
             }
           );
+
           const statusData = await statusRes.json();
-          const status = statusData?.data?.status;
-          if (status === 'done' && statusData?.data?.url) {
-            save(8, { editedVideo: { video_url: statusData.data.url, id: result.id } });
-            router.push('/onboarding/9');
+          console.log('Polling response:', statusData);
+
+          const status = statusData?.response?.status;
+          const videoUrl = statusData?.response?.url;
+
+          if (status === 'done' && videoUrl) {
+            save(8, { editedVideo: { video_url: videoUrl, id: result.id } });
+            window.location.href = videoUrl; // router.push('/onboarding/9')?
             done = true;
           } else if (status === 'failed') {
             throw new Error('Video rendering failed. Please try again.');
           }
         }
 
-        if (!done) {
+        if (!done && isMounted) {
           setError('Video processing timed out. Please try again.');
         }
       } catch (err: any) {
-        console.error(err);
-        setError('Failed to edit video. Please try again.');
+          console.error('Caught error in video editing flow:', err);
+          if (isMounted) setError(`Failed to edit video: ${err.message || err}`);
       } finally {
-        setPolling(false);
+        sessionStorage.removeItem(sessionKey);
+        if (isMounted) setPolling(false);
       }
     })();
-  }, [data, router, save]);
+
+    return () => { isMounted = false; };
+  }, [mediaBlobUrl, data, save, router]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', textAlign: 'center' }}>
       {error ? (
         <>
           <p style={{ color: 'red', marginBottom: '1rem' }}>{error}</p>
-          <button onClick={() => { setError(null); router.refresh(); }} style={{ padding: '0.5rem 1rem', background: '#0ea5e9', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer' }}>
+          <button
+            onClick={() => {
+              setError(null);
+              router.refresh();
+            }}
+            style={{ padding: '0.5rem 1rem', background: '#0ea5e9', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer' }}
+          >
             Try Again
           </button>
         </>
@@ -96,14 +118,18 @@ export default function Step8() {
           <h2 style={{ marginBottom: '1rem' }}>
             {polling ? progressText : 'Editing your video…'}
           </h2>
-          <div style={{ width: '50%', height: 8, background: '#e2e8f0', borderRadius: 4, overflow: 'hidden', position: 'relative' }}>
-            <div style={{
-              width: polling ? '60%' : '30%',
-              height: '100%',
-              background: '#0ea5e9',
-              position: 'absolute',
-              animation: 'pulse 1.2s infinite ease-in-out'
-            }} />
+          <div
+            style={{ width: '50%', height: 8, background: '#e2e8f0', borderRadius: 4, overflow: 'hidden', position: 'relative' }}
+          >
+            <div
+              style={{
+                width: polling ? '60%' : '30%',
+                height: '100%',
+                background: '#0ea5e9',
+                position: 'absolute',
+                animation: 'pulse 1.2s infinite ease-in-out',
+              }}
+            />
           </div>
           <style>{`
             @keyframes pulse {

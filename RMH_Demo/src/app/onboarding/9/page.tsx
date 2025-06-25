@@ -1,4 +1,4 @@
-'use client';
+/*'use client';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useLocalStorage } from '@/lib/useLocalStorage'; // or whatever you use for state
@@ -42,4 +42,4 @@ export default function Step9() {
       </button>
     </div>
   );
-}
+}*/

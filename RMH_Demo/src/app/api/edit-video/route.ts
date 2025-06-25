@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
 }, null, 2));
 
     // Render using the template
-    const renderRes = await fetch('https://api.shotstack.io/edit/stage/templates/render', {
+    const renderRes = await fetch('https://api.shotstack.io/stage/templates/render', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
