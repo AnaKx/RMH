@@ -92,6 +92,29 @@ img,video { max-width:100%; height:auto; display:block; }
   font-weight: 600;
 }
 
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.form-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.form-grid-3 button,
+.form-grid-4 button {
+  white-space: nowrap;
+  height: 40px;
+  padding: 8px 12px;
+}
+
 .input-control,
 select,
 textarea {
@@ -104,6 +127,18 @@ textarea {
   background-color: white;
   color: var(--clr-text);
 }
+
+select.input-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='14' height='10' viewBox='0 0 14 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%2300172e' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+
 
 .input-control:focus,
 select:focus,
@@ -208,7 +243,7 @@ textarea:focus {
 }
 
 .error-message {
-  color: red;
+  color: #ff4d4f;
   font-size: 0.875rem;
   line-height: 1.4;
 }
@@ -222,7 +257,7 @@ textarea:focus {
 }
 
 
-/* ----------  Standardized h1 and p styles (Figma specs) ---------- */
+/* ---------- h1 and p styles ---------- */
 h1 {
   max-width: 840px;
   height: 39px;
@@ -248,4 +283,80 @@ p {
   margin: 0 auto 1.5rem;
   color: #001434;
 
+}
+
+/* ---------- Form Grid Layout ---------- */
+.form-grid-3,
+.form-grid-4 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* this applies between all items */
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.form-grid-3 > *,
+.form-grid-4 > * {
+  flex: 1 1 calc(25% - 12px); /* Adjust this if needed */
+  min-width: 160px; /* optional, ensures inputs don’t shrink too much */
+  max-width: 100%;
+}
+
+.form-grid-3 button,
+.form-grid-4 button {
+  white-space: nowrap;
+  height: 40px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.form-grid-3 button:hover,
+.form-grid-4 button:hover {
+  background-color: #e2e2e2;
+}
+
+.button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  width: auto;
+  height: 40px;
+
+  padding: 8px 18px;
+  border-radius: 12px;
+
+  background-color: #76D3FE;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 600;
+  max-width: fit-content;
+
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-secondary:hover {
+  filter: brightness(1.05);
+}
+
+.button-transparent {
+  background: transparent;
+  color: var(--clr-text);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.button-transparent:hover {
+  color: var(--clr-primary); 
 }

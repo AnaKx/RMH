@@ -54,7 +54,7 @@ export default function Step1() {
         
       >
         <div className="form-field required">
-          <label htmlFor="firstName">First name</label><br/>
+          <label htmlFor="firstName">First name</label>
           <input
             id="firstName"
             className="input-control"
@@ -69,7 +69,7 @@ export default function Step1() {
         </div>
 
         <div className="form-field required">
-          <label htmlFor='lastName'>Last name</label><br/>
+          <label htmlFor='lastName'>Last name</label>
           <input
           id="lastName"
           className="input-control"
@@ -85,7 +85,7 @@ export default function Step1() {
         </div>
 
         <div className="form-field required">
-          <label htmlFor='displayName'>Display name</label><br/>
+          <label htmlFor='displayName'>Display name</label>
           <input
           id="displayName"
           className="input-control"
@@ -101,7 +101,7 @@ export default function Step1() {
         </div>
 
         <div className="form-field required">
-          <label htmlFor='location'>Location</label><br/>
+          <label htmlFor='location'>Location</label>
           <input
           id="location"
           className="input-control"
@@ -150,7 +150,7 @@ export default function Step1() {
         </div>
 
       <div className="form-field required">
-          <label htmlFor='about'>About</label><br/>
+          <label htmlFor='about'>About</label>
           <textarea
           id="about"
           className="input-control"
@@ -188,7 +188,7 @@ export default function Step1() {
         </div>
 
       <div className="form-field required">
-          <label htmlFor='profilePicture'>Profile Picture</label><br/>
+          <label htmlFor='profilePicture'>Profile Picture</label>
           <input
           id="profilePicture"
           className="input-control"
