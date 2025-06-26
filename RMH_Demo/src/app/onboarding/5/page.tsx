@@ -17,7 +17,7 @@ export default function Step5() {
         Your video should be around 60–90 seconds.
       </p>
 
-      <div>
+      <div className="script-card">
           {script.split('\n\n').map((para: string, i: number) => (
           <p key={i} style={{ marginBottom: i < script.split('\n\n').length - 1 ? 16 : 0 }}>
             {para}

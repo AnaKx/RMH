@@ -127,7 +127,7 @@ const skills = watch("skills");
               </button>
           </div>
 
-          <div className="form-field required">
+          <div className="form-field">
               <label htmlFor="education">Education</label>
               {eduFields.map((field, idx) => (
                 <div key={field.id} className="form-grid-4">
@@ -170,7 +170,7 @@ const skills = watch("skills");
               </button>
           </div>
 
-          <div className="form-field required">
+          <div className="form-field">
               <label htmlFor="cert_award">Certifications/Awards</label>
               {certFields.map((field, idx) => (
                 <div key={field.id} className="form-grid-3">

@@ -20,14 +20,17 @@ export default function Step7() {
         </div>
       )}
 
-      <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: 1000 }}>
         <button
           onClick={() => router.push('/onboarding/6')}
-          style={{ marginRight: 16 }}
+          className='button-transparent'
         >
           Re-record Video
         </button>
-        <button onClick={() => router.push('/onboarding/8')}  className="button">
+        <button
+          onClick={() => router.push('/onboarding/8')}
+          className='button'
+        >
           Use This Video
         </button>
       </div>

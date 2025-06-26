@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 
 
   const prompt = `
-Carfully analize the following information: 
+Carefully analyze the following information: 
 First name:     ${form.firstName}
 Last name:      ${form.lastName}
 Display name:   ${form.displayName}
@@ -47,7 +47,7 @@ You’re an AI scriptwriter. You must generate a spoken script where:
 • The Introduction takes up approximately 1/6 of the script,
 • The Core Message takes up 2/3 of the script,
 • The Conclusion takes up 1/6 of the script.
-• This structure scales proportionally, whether the script is closer to 135 or 200 words, excluding the cues. It most be at least 135 words and 200 words at the longes, exluding cues. 
+• This structure scales proportionally, whether the script is closer to 135 or 200 words, excluding the cues. It must be at least 135 words and no more than 200 words, excluding cues. 
 • There are exactly three sections: [Introduction], [Core Message], and [Conclusion].  
 • Introduction: State the speaker’s name and one key detail (profession, passion, or role).  
 • Core message:  
