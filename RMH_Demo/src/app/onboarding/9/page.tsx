@@ -1,12 +1,12 @@
-/*'use client';
+'use client';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useLocalStorage } from '@/lib/useLocalStorage'; // or whatever you use for state
 
 export default function Step9() {
-  const router = useRouter();
+  /*const router = useRouter();
   const [data] = useLocalStorage('formData', {}); // adjust if your hook is different
-  const videoUrl = data[8]?.editedVideo?.video_url;
+  const videoUrl = data[]?.editedVideo?.video_url;
 
   useEffect(() => {
     if (videoUrl) {
@@ -41,5 +41,5 @@ export default function Step9() {
         Continue
       </button>
     </div>
-  );
-}*/
+  );*/
+}
