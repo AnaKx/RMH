@@ -113,7 +113,12 @@ const skills = watch("skills");
                       {...register(`skills.${idx}.name` as const, { required: true })}
                       className="input-control"
                   />
-                  <button type="button" onClick={() => removeSkill(idx)} className="button-transparent">
+                  <button
+                    type="button"
+                    onClick={() => removeSkill(idx)}
+                    className="button-transparent"
+                    style={{ backgroundColor: 'transparent', border: 'none', color: 'black', fontWeight: 600 }}
+                  >
                       Remove
                   </button>
                   </div>
@@ -155,7 +160,12 @@ const skills = watch("skills");
                       ))}
                   </select>
                   <div>
-                    <button type="button" onClick={() => removeEdu(idx)} className="button-transparent">
+                    <button
+                      type="button"
+                      onClick={() => removeEdu(idx)}
+                      className="button-transparent"
+                      style={{ backgroundColor: 'transparent', border: 'none', color: 'black', fontWeight: 600 }}
+                    >
                         Remove
                     </button>
                   </div>
@@ -193,7 +203,12 @@ const skills = watch("skills");
                       </option>
                       ))}
                   </select>
-                    <button type="button" onClick={() => removeCert(idx)} className="button-transparent"> 
+                    <button
+                      type="button"
+                      onClick={() => removeCert(idx)}
+                      className="button-transparent"
+                      style={{ backgroundColor: 'transparent', border: 'none', color: 'black', fontWeight: 600 }}
+                    > 
                         Remove
                     </button>
                 </div>

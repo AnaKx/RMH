@@ -28,7 +28,7 @@ export default function Step3() {
         guide you with an AI-generated script based on your profile info.
       </p>
 
-      <div
+      <div className="script-card"
       >
         <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
           {bulletPoints.map((point, i) => (
