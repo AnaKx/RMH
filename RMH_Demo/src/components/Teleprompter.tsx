@@ -45,8 +45,9 @@ export function Teleprompter({
         padding: 16,
         background: 'rgba(17,17,17,0.6)',
         color: '#0f0',
+        fontSize: '12rem',
         fontFamily: 'monospace',
-        lineHeight: 1.5,
+        lineHeight: '14rem',
         pointerEvents: 'none',
         ...style,
       }}

@@ -14,7 +14,6 @@ const VideoPreview = memo(({ stream }: { stream: MediaStream | null }) => {
     }
   }, [stream]);
   return (
-
     <video
       ref={videoRef}
       autoPlay
@@ -155,7 +154,7 @@ let seconds = 0;
         style={{
           position: 'relative',
           width: '100vw',
-          height: 'calc(100vh - 120px)',
+          height: '100vh',
           margin: 0,
           borderRadius: 0,
           overflow: 'hidden',
